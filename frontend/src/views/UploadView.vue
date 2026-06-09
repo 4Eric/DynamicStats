@@ -20,13 +20,14 @@ function onFileChange(e: Event) {
 async function upload() {
   if (!file.value) return;
   isUploading.value = true;
+  const API_BASE = import.meta.env.VITE_API_URL || '';
   
   const formData = new FormData();
   formData.append('screenshot', file.value);
   formData.append('type', selectedType.value);
 
   try {
-    const res = await fetch('/api/ingest/screenshot', {
+    const res = await fetch(`${API_BASE}/api/ingest/screenshot`, {
       method: 'POST',
       body: formData
     });

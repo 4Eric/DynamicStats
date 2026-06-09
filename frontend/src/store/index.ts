@@ -11,12 +11,13 @@ export const useAppStore = defineStore('app', {
   actions: {
     async fetchData() {
       // Fetch games and players from backend
+      const API_BASE = import.meta.env.VITE_API_URL || '';
       try {
         const [gamesRes, playersRes, battingRes, pitchingRes] = await Promise.all([
-          fetch('/api/games'),
-          fetch('/api/players'),
-          fetch('/api/batting'),
-          fetch('/api/pitching')
+          fetch(`${API_BASE}/api/games`),
+          fetch(`${API_BASE}/api/players`),
+          fetch(`${API_BASE}/api/batting`),
+          fetch(`${API_BASE}/api/pitching`)
         ]);
         if (gamesRes.ok) this.games = await gamesRes.json();
         if (playersRes.ok) this.players = await playersRes.json();
