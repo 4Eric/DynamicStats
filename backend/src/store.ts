@@ -30,7 +30,10 @@ export async function getBattingLines(): Promise<BattingLine[]> {
 
 export async function getPitchingLines(): Promise<PitchingLine[]> {
   const result = await pool.query('SELECT * FROM pitching_lines');
-  return result.rows;
+  return result.rows.map(row => ({
+    ...row,
+    IP: parseFloat(row.IP)
+  }));
 }
 
 export async function saveGame(game: Game) {
