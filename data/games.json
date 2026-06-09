@@ -1,0 +1,182 @@
+[
+  {
+    "id": "81ca6f86-b91f-49de-99d1-e5703f2d3bc6",
+    "date": "2026-05-02",
+    "opponent": "Etobicoke Rangers",
+    "ourScore": 13,
+    "opponentScore": 0,
+    "result": "W",
+    "gameNumber": 1
+  },
+  {
+    "id": "e64bd1ba-3265-4654-a0ed-e6710fd995d8",
+    "date": "2026-05-05",
+    "opponent": "Brampton Royals",
+    "ourScore": 11,
+    "opponentScore": 1,
+    "result": "W",
+    "gameNumber": 2
+  },
+  {
+    "id": "af874837-6941-42c2-8028-abbe178819ef",
+    "date": "2026-05-06",
+    "opponent": "Mississauga North",
+    "ourScore": 5,
+    "opponentScore": 5,
+    "result": "T",
+    "gameNumber": 3
+  },
+  {
+    "id": "b345c45b-11af-4a66-ba7b-48a46d384c07",
+    "date": "2026-05-11",
+    "opponent": "Oakville",
+    "ourScore": 3,
+    "opponentScore": 5,
+    "result": "L",
+    "gameNumber": 4
+  },
+  {
+    "id": "b91d749b-8733-462e-8995-643ed477aed2",
+    "date": "2026-05-13",
+    "opponent": "Brampton Royals",
+    "ourScore": 18,
+    "opponentScore": 3,
+    "result": "W",
+    "gameNumber": 5
+  },
+  {
+    "id": "a4928b09-74c8-409d-a359-f8ec84183259",
+    "date": "2026-05-15",
+    "opponent": "Scarborough Stingers",
+    "ourScore": 5,
+    "opponentScore": 3,
+    "result": "W",
+    "gameNumber": 6
+  },
+  {
+    "id": "63d75451-8c54-4d64-ab0e-76024ab5dbe7",
+    "date": "2026-05-16",
+    "opponent": "Newmarket",
+    "ourScore": 9,
+    "opponentScore": 1,
+    "result": "W",
+    "gameNumber": 7
+  },
+  {
+    "id": "78240947-aaef-4331-b99a-7b2fa490ad7b",
+    "date": "2026-05-16",
+    "opponent": "WOBA AA Bulls",
+    "ourScore": 12,
+    "opponentScore": 2,
+    "result": "W",
+    "gameNumber": 8
+  },
+  {
+    "id": "291b1086-f2ac-4e31-a786-a03114016e8e",
+    "date": "2026-05-17",
+    "opponent": "Mississauga North",
+    "ourScore": 3,
+    "opponentScore": 8,
+    "result": "L",
+    "gameNumber": 9
+  },
+  {
+    "id": "fd97cecf-365c-4482-8552-9b51d1c364e8",
+    "date": "2026-05-17",
+    "opponent": "Scarborough Stingers",
+    "ourScore": 13,
+    "opponentScore": 12,
+    "result": "W",
+    "gameNumber": 10
+  },
+  {
+    "id": "c2615b8e-3cd5-48a5-824e-9e5331118b4c",
+    "date": "2026-05-20",
+    "opponent": "Halton Hills",
+    "ourScore": 12,
+    "opponentScore": 5,
+    "result": "W",
+    "gameNumber": 11
+  },
+  {
+    "id": "6660d0ec-689a-4b4d-9437-726d6e39d33c",
+    "date": "2026-05-26",
+    "opponent": "Mississauga North",
+    "ourScore": 9,
+    "opponentScore": 7,
+    "result": "W",
+    "gameNumber": 12
+  },
+  {
+    "id": "14eb0723-83b8-4ad8-8f74-c062e6f84796",
+    "date": "2026-05-28",
+    "opponent": "Burlington Bulls",
+    "ourScore": 18,
+    "opponentScore": 1,
+    "result": "W",
+    "gameNumber": 13
+  },
+  {
+    "id": "ab097bf9-8ba6-4ab3-a38f-c2942a043c02",
+    "date": "2026-05-29",
+    "opponent": "Milton Mets",
+    "ourScore": 12,
+    "opponentScore": 6,
+    "result": "W",
+    "gameNumber": 14
+  },
+  {
+    "id": "8bf40d78-77a0-47bb-8d0d-3c313b559a87",
+    "date": "2026-06-03",
+    "opponent": "Halton Hills",
+    "ourScore": 11,
+    "opponentScore": 7,
+    "result": "W",
+    "gameNumber": 15
+  },
+  {
+    "id": "8088e1d7-123b-4f81-8da7-73bcaca6c998",
+    "date": "2026-06-05",
+    "opponent": "Stratford Nationals",
+    "ourScore": 6,
+    "opponentScore": 1,
+    "result": "W",
+    "gameNumber": 16
+  },
+  {
+    "id": "3ba9a559-a96a-499b-ab4c-58a047cb41df",
+    "date": "2026-06-06",
+    "opponent": "Etobicoke Rangers",
+    "ourScore": 8,
+    "opponentScore": 3,
+    "result": "W",
+    "gameNumber": 17
+  },
+  {
+    "id": "a128edeb-3193-456d-a3b8-ade57043ecff",
+    "date": "2026-06-06",
+    "opponent": "Wranglers",
+    "ourScore": 9,
+    "opponentScore": 8,
+    "result": "W",
+    "gameNumber": 18
+  },
+  {
+    "id": "1541a86c-f18e-4143-baf8-ee1d921bf9ac",
+    "date": "2026-06-07",
+    "opponent": "Guelph Royals",
+    "ourScore": 8,
+    "opponentScore": 5,
+    "result": "W",
+    "gameNumber": 19
+  },
+  {
+    "id": "4c769610-e437-4810-ac67-526e8019494d",
+    "date": "2026-06-07",
+    "opponent": "London Badgers",
+    "ourScore": 7,
+    "opponentScore": 6,
+    "result": "W",
+    "gameNumber": 20
+  }
+]
