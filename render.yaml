@@ -2,6 +2,7 @@ services:
   - type: web
     name: dynamicstats-api
     env: node
+    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: npx ts-node src/index.ts
