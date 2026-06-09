@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: dynamicstats-api
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npx ts-node src/index.ts
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: GEMINI_API_KEY
+        sync: false
