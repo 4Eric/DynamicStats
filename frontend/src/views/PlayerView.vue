@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue';
 import { useAppStore } from '../store';
 import { useRoute } from 'vue-router';
-import { calculateBattingStats, calculatePitchingStats } from '../utils/statsEngine';
+import { calculateBattingStats, calculatePitchingStats, parseIP } from '../utils/statsEngine';
 import TrendChart from '../components/TrendChart.vue';
 import GameRangeSelector from '../components/GameRangeSelector.vue';
 import Card from '../components/Card.vue';
@@ -39,7 +39,18 @@ const filteredPitchingLines = computed(() => {
 const battingStats = computed(() => calculateBattingStats(filteredBattingLines.value));
 const pitchingStats = computed(() => calculatePitchingStats(filteredPitchingLines.value));
 
-// Real trend data for batting average
+const selectedStat = ref('AVG');
+const statOptions = [
+  { label: 'Batting Average (AVG)', value: 'AVG' },
+  { label: 'On-Base Pct (OBP)', value: 'OBP' },
+  { label: 'Slugging Pct (SLG)', value: 'SLG' },
+  { label: 'On-Base + Slugging (OPS)', value: 'OPS' },
+  { label: 'Earned Run Average (ERA)', value: 'ERA' },
+  { label: 'WHIP', value: 'WHIP' },
+  { label: 'Strikeouts per 6 (K/6)', value: 'K6' }
+];
+
+// Real trend data
 const trendLabels = computed(() => {
   // Sort games by date ascending for the chart
   const games = [...selectedGames.value].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -49,30 +60,57 @@ const trendLabels = computed(() => {
   });
 });
 
-const avgTrendData = computed(() => {
-  // We need to calculate running AVG up to each game in the selected range
+const trendData = computed(() => {
   const games = [...selectedGames.value].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  let runningHits = 0;
-  let runningAB = 0;
   
+  let rAB = 0, rH = 0, rBB = 0, rHBP = 0, rTB = 0;
+  let rIP = 0, rER = 0, rPitchH = 0, rPitchBB = 0, rSO = 0;
+
   return games.map(g => {
-    const line = filteredBattingLines.value.find(l => l.gameId === g.id);
-    if (line) {
-      runningHits += line.H;
-      runningAB += line.AB;
+    const bLine = filteredBattingLines.value.find(l => l.gameId === g.id);
+    if (bLine) {
+      rAB += bLine.AB; rH += bLine.H; rBB += bLine.BB; rHBP += (bLine.HBP || 0); rTB += bLine.TB;
     }
-    return runningAB > 0 ? Number((runningHits / runningAB).toFixed(3)) : 0;
+    
+    const pLine = filteredPitchingLines.value.find(l => l.gameId === g.id);
+    if (pLine) {
+      rIP += parseIP(pLine.IP); rER += pLine.ER; rPitchH += pLine.H; rPitchBB += pLine.BB; rSO += pLine.SO;
+    }
+
+    const stat = selectedStat.value;
+    if (stat === 'AVG') return rAB > 0 ? Number((rH / rAB).toFixed(3)) : 0;
+    if (stat === 'OBP') {
+      const pa = rAB + rBB + rHBP;
+      return pa > 0 ? Number(((rH + rBB + rHBP) / pa).toFixed(3)) : 0;
+    }
+    if (stat === 'SLG') return rAB > 0 ? Number((rTB / rAB).toFixed(3)) : 0;
+    if (stat === 'OPS') {
+      const pa = rAB + rBB + rHBP;
+      const obp = pa > 0 ? (rH + rBB + rHBP) / pa : 0;
+      const slg = rAB > 0 ? rTB / rAB : 0;
+      return Number((obp + slg).toFixed(3));
+    }
+    if (stat === 'ERA') return rIP > 0 ? Number(((rER * 6) / rIP).toFixed(2)) : 0;
+    if (stat === 'WHIP') return rIP > 0 ? Number(((rPitchBB + rPitchH) / rIP).toFixed(2)) : 0;
+    if (stat === 'K6') return rIP > 0 ? Number(((rSO * 6) / rIP).toFixed(2)) : 0;
+    
+    return 0;
   });
 });
 
-const datasets = computed(() => [
-  {
-    label: 'Running AVG',
-    data: avgTrendData.value,
-    borderColor: '#3b82f6',
-    backgroundColor: '#3b82f6',
-  }
-]);
+const datasets = computed(() => {
+  const isPitching = ['ERA', 'WHIP', 'K6'].includes(selectedStat.value);
+  const color = isPitching ? '#10b981' : '#3b82f6';
+  
+  return [
+    {
+      label: `Running ${selectedStat.value}`,
+      data: trendData.value,
+      borderColor: color,
+      backgroundColor: color,
+    }
+  ];
+});
 
 // Game logs (sorted descending by game date)
 const battingGameLogs = computed(() => {
@@ -130,6 +168,18 @@ const pitchingGameLogs = computed(() => {
 
     <GameRangeSelector v-model="gameRange" />
 
+    <Card>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-gray-200">Performance Trend</h3>
+        <select v-model="selectedStat" class="bg-gray-800 border border-gray-700 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
+          <option v-for="opt in statOptions" :key="opt.value" :value="opt.value">
+            {{ opt.label }}
+          </option>
+        </select>
+      </div>
+      <TrendChart :labels="trendLabels" :datasets="datasets" />
+    </Card>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card>
         <h3 class="text-lg font-bold mb-4 text-blue-400">Batting Stats</h3>
@@ -150,10 +200,6 @@ const pitchingGameLogs = computed(() => {
             <div class="text-gray-400 text-xs">RBI</div>
             <div class="text-xl font-bold">{{ battingStats.RBI }}</div>
           </div>
-        </div>
-        <div class="border-t border-gray-800 pt-6">
-          <h4 class="text-sm font-semibold mb-4 text-gray-400">Batting Average Trend</h4>
-          <TrendChart :labels="trendLabels" :datasets="datasets" />
         </div>
       </Card>
 
