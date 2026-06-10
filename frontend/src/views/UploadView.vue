@@ -59,11 +59,30 @@ const gameDetails = ref({
   result: 'W' as 'W' | 'L' | 'T'
 });
 
+const selectedExistingGameId = ref('new');
+
+function onExistingGameChange() {
+  if (selectedExistingGameId.value === 'new') {
+    gameDetails.value.id = '';
+    gameDetails.value.gameNumber = store.games.length + 1;
+    gameDetails.value.opponent = '';
+    gameDetails.value.ourScore = 0;
+    gameDetails.value.opponentScore = 0;
+  } else {
+    const existing = store.games.find(g => g.id === selectedExistingGameId.value);
+    if (existing) {
+      gameDetails.value = { ...existing };
+    }
+  }
+}
+
 async function confirmAndSave() {
   if (!result.value) return;
   
-  // Generate a random ID for the game
-  gameDetails.value.id = crypto.randomUUID();
+  // Generate a random ID for the game only if creating a new one
+  if (!gameDetails.value.id) {
+    gameDetails.value.id = crypto.randomUUID();
+  }
 
   const payload = {
     game: gameDetails.value,
@@ -146,6 +165,18 @@ async function confirmAndSave() {
       <pre class="text-sm text-gray-300 bg-gray-900 p-4 rounded">{{ JSON.stringify(result, null, 2) }}</pre>
       
       <h3 class="text-lg font-bold mt-6 mb-4">Game Details</h3>
+      
+      <div class="mb-6">
+        <label class="block text-sm text-gray-400 mb-1">Target Game</label>
+        <select v-model="selectedExistingGameId" @change="onExistingGameChange" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-white">
+          <option value="new">-- Create New Game --</option>
+          <option v-for="g in store.games" :key="g.id" :value="g.id">
+            Game {{ g.gameNumber }} vs {{ g.opponent }} ({{ g.date }})
+          </option>
+        </select>
+        <p class="text-xs text-gray-500 mt-1">If uploading batting and pitching separately, select the game you just created to attach these stats to it.</p>
+      </div>
+
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div>
           <label class="block text-sm text-gray-400 mb-1">Date</label>
