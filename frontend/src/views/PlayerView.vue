@@ -111,11 +111,17 @@ const pitchingGameLogs = computed(() => {
 <template>
   <div v-if="player" class="space-y-6">
     <div class="bg-[#1a1a1a] border border-gray-800 rounded-xl p-8 flex items-center gap-6">
-      <div class="w-20 h-20 bg-blue-900 text-blue-200 rounded-full flex items-center justify-center text-3xl font-bold">
+      <div v-if="player.number" class="w-20 h-20 bg-blue-900 text-blue-200 rounded-full flex items-center justify-center text-3xl font-bold">
         #{{ player.number }}
       </div>
+      <div v-else class="w-20 h-20 bg-blue-900 text-blue-200 rounded-full flex items-center justify-center text-3xl font-bold">
+        {{ player.name.charAt(0) }}
+      </div>
       <div>
-        <h2 class="text-3xl font-bold">{{ player.name }}</h2>
+        <h2 class="text-3xl font-bold">
+          {{ player.name }} 
+          <span v-if="player.number" class="text-gray-500 font-normal">#{{ player.number }}</span>
+        </h2>
         <div class="text-gray-400 mt-1 flex gap-2">
           <span v-for="pos in player.positions" :key="pos" class="bg-gray-800 px-2 py-1 rounded text-sm">{{ pos }}</span>
         </div>
