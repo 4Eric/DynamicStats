@@ -69,12 +69,18 @@ app.post('/api/ingest/confirm', async (req, res) => {
         line.gameId = game.id;
         if (!line.playerId && line.name) {
           let p = players.find(player => player.name.toLowerCase() === line.name.toLowerCase());
+          
           if (!p) {
-            const newP = { id: crypto.randomUUID(), name: line.name, number: 0, positions: [] };
+            const newP = { id: crypto.randomUUID(), name: line.name, number: line.number || 0, positions: [] };
             await savePlayer(newP);
             players.push(newP);
             p = newP;
+          } else if (line.number && p.number === 0) {
+            // Update the existing player with the newly discovered number
+            p.number = line.number;
+            await savePlayer(p);
           }
+          
           line.playerId = p.id;
         }
       }

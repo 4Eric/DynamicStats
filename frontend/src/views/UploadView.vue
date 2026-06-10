@@ -32,7 +32,16 @@ async function upload() {
       body: formData
     });
     const data = await res.json();
-    result.value = data.data;
+    
+    if (data.data.game) {
+      gameDetails.value.opponent = data.data.game.opponent || '';
+      if (data.data.game.date) gameDetails.value.date = data.data.game.date;
+      if (data.data.game.ourScore !== undefined) gameDetails.value.ourScore = data.data.game.ourScore;
+      if (data.data.game.opponentScore !== undefined) gameDetails.value.opponentScore = data.data.game.opponentScore;
+      if (data.data.game.result) gameDetails.value.result = data.data.game.result;
+    }
+    
+    result.value = data.data.lines || data.data;
   } catch (e) {
     console.error(e);
   } finally {
