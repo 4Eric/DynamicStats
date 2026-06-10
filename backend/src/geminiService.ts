@@ -23,8 +23,8 @@ const battingSchema: Schema = {
       items: {
         type: Type.OBJECT,
         properties: {
-          name: { type: Type.STRING, description: "Player's name exactly as it appears in the row (e.g. 'N Shah #14 (LF)')" },
-          number: { type: Type.INTEGER, description: "Player's uniform number extracted from the name field" },
+          name: { type: Type.STRING, description: "Player's name without uniform number or position (e.g. 'N Shah')" },
+          number: { type: Type.INTEGER, description: "Player's uniform number extracted from the name field, if present" },
           AB: { type: Type.INTEGER },
           R: { type: Type.INTEGER },
           H: { type: Type.INTEGER },
@@ -59,8 +59,8 @@ const pitchingSchema: Schema = {
       items: {
         type: Type.OBJECT,
         properties: {
-          name: { type: Type.STRING, description: "Pitcher's name exactly as it appears" },
-          number: { type: Type.INTEGER, description: "Player's uniform number extracted from the name field" },
+          name: { type: Type.STRING, description: "Pitcher's name without uniform number or position (e.g. 'N Shah')" },
+          number: { type: Type.INTEGER, description: "Player's uniform number extracted from the name field, if present" },
           IP: { type: Type.NUMBER, description: "Innings Pitched, stored as decimal e.g. 1.2" },
           H: { type: Type.INTEGER },
           R: { type: Type.INTEGER },
