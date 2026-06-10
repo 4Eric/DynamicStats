@@ -69,8 +69,9 @@ export async function saveBattingLines(lines: BattingLine[]) {
           "gameId", "playerId", "AB", "R", "H", "RBI", "BB", "SO", "doubles", "triples", "HR", "TB", "SB", "CS", "HBP"
          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
         [
-          line.gameId, line.playerId, line.AB, line.R, line.H, line.RBI, line.BB, line.SO,
-          line.doubles, line.triples, line.HR, line.TB, line.SB, line.CS, line.HBP
+          line.gameId, line.playerId, 
+          line.AB || 0, line.R || 0, line.H || 0, line.RBI || 0, line.BB || 0, line.SO || 0,
+          line.doubles || 0, line.triples || 0, line.HR || 0, line.TB || 0, line.SB || 0, line.CS || 0, line.HBP || 0
         ]
       );
     }
@@ -102,8 +103,9 @@ export async function savePitchingLines(lines: PitchingLine[]) {
           "gameId", "playerId", "IP", "H", "R", "ER", "BB", "SO", "HBP", "pitches", "strikes", "BF", "WP"
          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
         [
-          line.gameId, line.playerId, line.IP, line.H, line.R, line.ER, line.BB, line.SO,
-          line.HBP, line.pitches, line.strikes, line.BF, line.WP
+          line.gameId, line.playerId, 
+          line.IP || 0, line.H || 0, line.R || 0, line.ER || 0, line.BB || 0, line.SO || 0,
+          line.HBP || 0, line.pitches || 0, line.strikes || 0, line.BF || 0, line.WP || 0
         ]
       );
     }
