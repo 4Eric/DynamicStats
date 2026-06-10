@@ -81,6 +81,8 @@ app.post('/api/ingest/confirm', async (req, res) => {
       return lines;
     };
 
+    await saveGame(game);
+
     if (battingLines?.length) {
       await saveBattingLines(await resolvePlayers(battingLines));
     }
@@ -88,7 +90,6 @@ app.post('/api/ingest/confirm', async (req, res) => {
       await savePitchingLines(await resolvePlayers(pitchingLines));
     }
     
-    await saveGame(game);
     res.json({ success: true });
   } catch (error) {
     console.error('Error saving data:', error);
