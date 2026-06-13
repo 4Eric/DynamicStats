@@ -91,7 +91,8 @@ async function confirmAndSave() {
   };
 
   try {
-    const res = await fetch('/api/ingest/confirm', {
+    const API_BASE = import.meta.env.VITE_API_URL || '';
+    const res = await fetch(`${API_BASE}/api/ingest/confirm`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
