@@ -57,7 +57,8 @@ async function saveEdit() {
     })
   };
   try {
-    const res = await fetch('/api/ingest/confirm', {
+    const API_BASE = import.meta.env.VITE_API_URL || '';
+    const res = await fetch(`${API_BASE}/api/ingest/confirm`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -77,7 +78,8 @@ async function saveEdit() {
 async function deleteGame(game: any) {
   if (!confirm(`Are you sure you want to delete Game ${game.gameNumber}?`)) return;
   try {
-    const res = await fetch(`/api/games/${game.id}`, { method: 'DELETE' });
+    const API_BASE = import.meta.env.VITE_API_URL || '';
+    const res = await fetch(`${API_BASE}/api/games/${game.id}`, { method: 'DELETE' });
     if (res.ok) {
       await store.fetchData();
       expandedGameId.value = null;
