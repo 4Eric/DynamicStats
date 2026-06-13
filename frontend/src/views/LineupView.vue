@@ -143,6 +143,7 @@ function generateLineup() {
               <option :value="1">Last 1 Game</option>
               <option :value="3">Last 3 Games</option>
               <option :value="5">Last 5 Games</option>
+              <option :value="10">Last 10 Games</option>
             </select>
           </div>
         </div>
