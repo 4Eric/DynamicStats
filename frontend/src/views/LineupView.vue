@@ -5,8 +5,9 @@ import { calculateBattingStats } from '../utils/statsEngine';
 
 const store = useAppStore();
 
-const selectedPlayerIds = ref<number[]>([]);
+const selectedPlayerIds = ref<string[]>([]);
 const generatedLineup = ref<any[]>([]);
+const gamesToInclude = ref<number>(0);
 
 // Filter unique players, sorted alphabetically
 const availablePlayers = computed(() => {
@@ -16,7 +17,7 @@ const availablePlayers = computed(() => {
   });
 });
 
-function togglePlayer(playerId: number) {
+function togglePlayer(playerId: string) {
   const index = selectedPlayerIds.value.indexOf(playerId);
   if (index === -1) {
     selectedPlayerIds.value.push(playerId);
@@ -34,8 +35,19 @@ function clearSelection() {
   generatedLineup.value = [];
 }
 
-function getPlayerStats(playerId: number) {
-  const lines = store.battingLines.filter(line => line.playerId === playerId);
+function getPlayerStats(playerId: string) {
+  let lines = store.battingLines.filter(line => line.playerId === playerId);
+  
+  if (gamesToInclude.value > 0) {
+    const linesWithDate = lines.map(line => {
+      const game = store.games.find(g => g.id === line.gameId);
+      return { ...line, date: game ? game.date : '' };
+    });
+    // Sort descending by date
+    linesWithDate.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    lines = linesWithDate.slice(0, Number(gamesToInclude.value));
+  }
+
   return calculateBattingStats(lines);
 }
 
@@ -116,11 +128,22 @@ function generateLineup() {
       
       <!-- Left Column: Player Selection -->
       <div class="bg-[#1a1a1a] rounded-xl border border-gray-800 p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-xl font-bold text-gray-200">Available Players</h3>
-          <div class="space-x-2">
-            <button @click="selectAll" class="text-sm px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded transition-colors text-gray-300">Select All</button>
-            <button @click="clearSelection" class="text-sm px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded transition-colors text-gray-300">Clear</button>
+        <div class="flex flex-col gap-3 mb-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-bold text-gray-200">Available Players</h3>
+            <div class="space-x-2">
+              <button @click="selectAll" class="text-sm px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded transition-colors text-gray-300">Select All</button>
+              <button @click="clearSelection" class="text-sm px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded transition-colors text-gray-300">Clear</button>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-400">Based on stats from:</label>
+            <select v-model="gamesToInclude" class="bg-[#242424] border border-gray-700 text-sm rounded px-2 py-1 text-gray-200 focus:outline-none focus:border-blue-500">
+              <option :value="0">All Season</option>
+              <option :value="1">Last 1 Game</option>
+              <option :value="3">Last 3 Games</option>
+              <option :value="5">Last 5 Games</option>
+            </select>
           </div>
         </div>
 
