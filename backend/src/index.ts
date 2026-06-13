@@ -66,10 +66,26 @@ app.post('/api/ingest/confirm', async (req, res) => {
     // Player resolution callback — runs inside the transaction
     const resolvePlayer = async (client: any, line: any, players: any[]) => {
       if (!line.playerId && line.name) {
-        let p = players.find((player: any) => player.name.toLowerCase() === line.name.toLowerCase());
+        const cleanLineName = line.name.replace(/\.+$/, '').trim().toLowerCase();
+        
+        // 1. Exact match (case insensitive)
+        let p = players.find((player: any) => player.name.toLowerCase() === cleanLineName);
+        
+        // 2. Prefix match (e.g. 'e swantee' starts with 'e swant')
+        if (!p && cleanLineName.length >= 3) {
+          p = players.find((player: any) => player.name.toLowerCase().startsWith(cleanLineName));
+        }
+        
+        // 3. Match by jersey number (if valid and > 0)
+        if (!p && line.number && Number(line.number) > 0) {
+          p = players.find((player: any) => player.number === Number(line.number));
+        }
         
         if (!p) {
-          const newP = { id: crypto.randomUUID(), name: line.name, number: line.number || 0 };
+          // If the cleanName is just a fragment, we use the original line.name as the official name, 
+          // but stripped of dots
+          const finalName = line.name.replace(/\.+$/, '').trim();
+          const newP = { id: crypto.randomUUID(), name: finalName, number: line.number || 0 };
           await savePlayerTx(client, newP);
           players.push(newP);
           p = newP;
