@@ -201,6 +201,9 @@ function getPitchingLines(gameId: string) {
                               <th class="py-2 px-3 text-right">AB</th>
                               <th class="py-2 px-3 text-right">R</th>
                               <th class="py-2 px-3 text-right">H</th>
+                              <th class="py-2 px-3 text-right">2B</th>
+                              <th class="py-2 px-3 text-right">3B</th>
+                              <th class="py-2 px-3 text-right">HR</th>
                               <th class="py-2 px-3 text-right">RBI</th>
                               <th class="py-2 px-3 text-right">BB</th>
                               <th class="py-2 px-3 text-right">SO</th>
@@ -213,6 +216,9 @@ function getPitchingLines(gameId: string) {
                                 <td class="py-2 px-3 text-right"><input type="number" v-model="line.AB" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
                                 <td class="py-2 px-3 text-right"><input type="number" v-model="line.R" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
                                 <td class="py-2 px-3 text-right"><input type="number" v-model="line.H" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
+                                <td class="py-2 px-3 text-right"><input type="number" v-model="line.doubles" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
+                                <td class="py-2 px-3 text-right"><input type="number" v-model="line.triples" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
+                                <td class="py-2 px-3 text-right"><input type="number" v-model="line.HR" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
                                 <td class="py-2 px-3 text-right"><input type="number" v-model="line.RBI" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
                                 <td class="py-2 px-3 text-right"><input type="number" v-model="line.BB" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
                                 <td class="py-2 px-3 text-right"><input type="number" v-model="line.SO" class="w-12 bg-gray-900 border border-gray-700 rounded p-1 text-white text-right"></td>
@@ -222,6 +228,9 @@ function getPitchingLines(gameId: string) {
                                 <td class="py-2 px-3 text-right">{{ line.AB }}</td>
                                 <td class="py-2 px-3 text-right">{{ line.R }}</td>
                                 <td class="py-2 px-3 text-right">{{ line.H }}</td>
+                                <td class="py-2 px-3 text-right">{{ line.doubles || 0 }}</td>
+                                <td class="py-2 px-3 text-right">{{ line.triples || 0 }}</td>
+                                <td class="py-2 px-3 text-right">{{ line.HR || 0 }}</td>
                                 <td class="py-2 px-3 text-right">{{ line.RBI }}</td>
                                 <td class="py-2 px-3 text-right">{{ line.BB }}</td>
                                 <td class="py-2 px-3 text-right">{{ line.SO }}</td>
