@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import DashboardView from '../views/DashboardView.vue';
 import UploadView from '../views/UploadView.vue';
 import PlayerView from '../views/PlayerView.vue';
+import LineupView from '../views/LineupView.vue';
 
 import GamesView from '../views/GamesView.vue';
 
@@ -11,6 +12,7 @@ const router = createRouter({
     { path: '/', component: DashboardView },
     { path: '/games', component: GamesView },
     { path: '/upload', component: UploadView },
+    { path: '/lineup', component: LineupView },
     { path: '/player/:id', component: PlayerView },
   ]
 });

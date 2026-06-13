@@ -19,6 +19,7 @@ onMounted(() => {
         <nav class="flex gap-4">
           <router-link to="/" class="text-gray-400 hover:text-white transition-colors" active-class="text-white font-medium">Dashboard</router-link>
           <router-link to="/games" class="text-gray-400 hover:text-white transition-colors" active-class="text-white font-medium">Games</router-link>
+          <router-link to="/lineup" class="text-gray-400 hover:text-white transition-colors" active-class="text-white font-medium">Lineup Optimizer</router-link>
           <router-link to="/upload" class="text-gray-400 hover:text-white transition-colors" active-class="text-white font-medium">Upload Box Score</router-link>
         </nav>
       </div>
