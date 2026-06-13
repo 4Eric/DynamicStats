@@ -83,7 +83,7 @@ export function calculatePitchingStats(lines: PitchingLine[]) {
 
   const ERA = totals.IP_num > 0 ? (totals.ER * 6) / totals.IP_num : 0; // assuming 6 inning youth games
   const WHIP = totals.IP_num > 0 ? (totals.BB + totals.H) / totals.IP_num : 0;
-  const K9 = totals.IP_num > 0 ? (totals.SO * 6) / totals.IP_num : 0; // K per 6 for youth
+  const K6 = totals.IP_num > 0 ? (totals.SO * 6) / totals.IP_num : 0; // K per 6 for youth
   const strikePct = totals.pitches > 0 ? (totals.strikes / totals.pitches) * 100 : 0;
 
   return {
@@ -91,7 +91,7 @@ export function calculatePitchingStats(lines: PitchingLine[]) {
     IP_formatted: formatIP(totals.IP_num),
     ERA: ERA.toFixed(2),
     WHIP: WHIP.toFixed(2),
-    K9: K9.toFixed(2),
+    K6: K6.toFixed(2),
     strikePct: strikePct.toFixed(1) + '%'
   };
 }

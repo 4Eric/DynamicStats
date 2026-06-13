@@ -1,8 +1,7 @@
 export interface Player {
   id: string;
   name: string;
-  number: number;
-  positions: string[];
+  number?: number;
 }
 
 export interface Game {

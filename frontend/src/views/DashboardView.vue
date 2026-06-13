@@ -134,7 +134,7 @@ watch([trendMode, () => store.battingLines.length, () => store.pitchingLines.len
     }
   } else {
     selectedTrendPlayers.value = rawPitchingLeaderboard.value.filter(p => p.IP_num > 0).map(p => p.playerId);
-    if (!['ERA','WHIP','K9','IP','H','R','ER','BB','SO'].includes(trendStat.value)) {
+    if (!['ERA','WHIP','K6','IP','H','R','ER','BB','SO'].includes(trendStat.value)) {
       trendStat.value = 'ERA';
     }
   }
@@ -238,7 +238,7 @@ const trendChartData = computed(() => {
           if (trendStat.value === 'SO') return line.SO;
           if (trendStat.value === 'ERA') return line.IP > 0 ? parseFloat(((line.ER * 6) / parseIP(line.IP)).toFixed(2)) : null;
           if (trendStat.value === 'WHIP') return line.IP > 0 ? parseFloat(((line.BB + line.H) / parseIP(line.IP)).toFixed(2)) : null;
-          if (trendStat.value === 'K9') return line.IP > 0 ? parseFloat(((line.SO * 6) / parseIP(line.IP)).toFixed(2)) : null;
+          if (trendStat.value === 'K6') return line.IP > 0 ? parseFloat(((line.SO * 6) / parseIP(line.IP)).toFixed(2)) : null;
           return 0;
         } else {
           if (line) {
@@ -258,7 +258,7 @@ const trendChartData = computed(() => {
           if (trendStat.value === 'SO') return runningSO;
           if (trendStat.value === 'ERA') return runningIP > 0 ? parseFloat(((runningER * 6) / runningIP).toFixed(2)) : null;
           if (trendStat.value === 'WHIP') return runningIP > 0 ? parseFloat(((runningBB + runningH) / runningIP).toFixed(2)) : null;
-          if (trendStat.value === 'K9') return runningIP > 0 ? parseFloat(((runningSO * 6) / runningIP).toFixed(2)) : null;
+          if (trendStat.value === 'K6') return runningIP > 0 ? parseFloat(((runningSO * 6) / runningIP).toFixed(2)) : null;
           return 0;
         }
       }
@@ -308,7 +308,7 @@ const trendChartData = computed(() => {
             <template v-else>
               <option value="ERA">ERA</option>
               <option value="WHIP">WHIP</option>
-              <option value="K9">K/9</option>
+              <option value="K6">K/6</option>
               <option value="IP">Innings Pitched (IP)</option>
               <option value="H">Hits Allowed (H)</option>
               <option value="R">Runs Allowed (R)</option>
@@ -426,7 +426,7 @@ const trendChartData = computed(() => {
               <th @click="sortByPitching('ER')" class="py-3 px-4 font-medium text-right cursor-pointer hover:text-white transition-colors duration-200">ER <ChevronUp v-if="sortKeyPitching === 'ER' && sortOrderPitching === 'asc'" class="inline w-4 h-4" /><ChevronDown v-if="sortKeyPitching === 'ER' && sortOrderPitching === 'desc'" class="inline w-4 h-4" /></th>
               <th @click="sortByPitching('BB')" class="py-3 px-4 font-medium text-right cursor-pointer hover:text-white transition-colors duration-200">BB <ChevronUp v-if="sortKeyPitching === 'BB' && sortOrderPitching === 'asc'" class="inline w-4 h-4" /><ChevronDown v-if="sortKeyPitching === 'BB' && sortOrderPitching === 'desc'" class="inline w-4 h-4" /></th>
               <th @click="sortByPitching('SO')" class="py-3 px-4 font-medium text-right cursor-pointer hover:text-white transition-colors duration-200">SO <ChevronUp v-if="sortKeyPitching === 'SO' && sortOrderPitching === 'asc'" class="inline w-4 h-4" /><ChevronDown v-if="sortKeyPitching === 'SO' && sortOrderPitching === 'desc'" class="inline w-4 h-4" /></th>
-              <th @click="sortByPitching('K9')" class="py-3 px-4 font-medium text-right cursor-pointer hover:text-white transition-colors duration-200">K/9 <ChevronUp v-if="sortKeyPitching === 'K9' && sortOrderPitching === 'asc'" class="inline w-4 h-4" /><ChevronDown v-if="sortKeyPitching === 'K9' && sortOrderPitching === 'desc'" class="inline w-4 h-4" /></th>
+              <th @click="sortByPitching('K6')" class="py-3 px-4 font-medium text-right cursor-pointer hover:text-white transition-colors duration-200">K/6 <ChevronUp v-if="sortKeyPitching === 'K6' && sortOrderPitching === 'asc'" class="inline w-4 h-4" /><ChevronDown v-if="sortKeyPitching === 'K6' && sortOrderPitching === 'desc'" class="inline w-4 h-4" /></th>
               <th @click="sortByPitching('WHIP')" class="py-3 px-4 font-medium text-right cursor-pointer hover:text-white transition-colors duration-200">WHIP <ChevronUp v-if="sortKeyPitching === 'WHIP' && sortOrderPitching === 'asc'" class="inline w-4 h-4" /><ChevronDown v-if="sortKeyPitching === 'WHIP' && sortOrderPitching === 'desc'" class="inline w-4 h-4" /></th>
               <th @click="sortByPitching('ERA')" class="py-3 px-4 font-medium text-right cursor-pointer hover:text-white transition-colors duration-200" :class="{'text-blue-400': sortKeyPitching === 'ERA'}">ERA <ChevronUp v-if="sortKeyPitching === 'ERA' && sortOrderPitching === 'asc'" class="inline w-4 h-4" /><ChevronDown v-if="sortKeyPitching === 'ERA' && sortOrderPitching === 'desc'" class="inline w-4 h-4" /></th>
             </tr>
@@ -445,7 +445,7 @@ const trendChartData = computed(() => {
               <td class="py-3 px-4 text-right text-gray-300">{{ player.ER }}</td>
               <td class="py-3 px-4 text-right text-gray-300">{{ player.BB }}</td>
               <td class="py-3 px-4 text-right text-gray-300">{{ player.SO }}</td>
-              <td class="py-3 px-4 text-right font-medium">{{ player.K9 }}</td>
+              <td class="py-3 px-4 text-right font-medium">{{ player.K6 }}</td>
               <td class="py-3 px-4 text-right font-medium">{{ player.WHIP }}</td>
               <td class="py-3 px-4 text-right font-bold text-emerald-400">{{ player.ERA }}</td>
             </tr>

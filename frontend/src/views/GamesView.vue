@@ -74,6 +74,22 @@ async function saveEdit() {
   }
 }
 
+async function deleteGame(game: any) {
+  if (!confirm(`Are you sure you want to delete Game ${game.gameNumber}?`)) return;
+  try {
+    const res = await fetch(`/api/games/${game.id}`, { method: 'DELETE' });
+    if (res.ok) {
+      await store.fetchData();
+      expandedGameId.value = null;
+    } else {
+      alert('Failed to delete game');
+    }
+  } catch (e) {
+    console.error(e);
+    alert('Failed to delete game');
+  }
+}
+
 function getBattingLines(gameId: string) {
   return store.battingLines.filter(l => l.gameId === gameId).map(line => {
     const player = store.players.find(p => p.id === line.playerId);
@@ -155,6 +171,7 @@ function getPitchingLines(gameId: string) {
                 </template>
                 <td class="py-3 px-4 text-right space-x-3">
                   <button v-if="expandedGameId === game.id && editingGameId !== game.id" @click="startEdit(game)" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium">Edit</button>
+                  <button v-if="expandedGameId === game.id && editingGameId !== game.id" @click="deleteGame(game)" class="text-red-400 hover:text-red-300 text-sm font-medium">Delete</button>
                   <button v-if="editingGameId === game.id" @click="saveEdit" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium">Save</button>
                   <button v-if="editingGameId === game.id" @click="cancelEdit" class="text-gray-400 hover:text-gray-300 text-sm font-medium">Cancel</button>
                   <button @click="toggleGameDetails(game.id!)" class="text-blue-400 hover:text-blue-300 text-sm font-medium">

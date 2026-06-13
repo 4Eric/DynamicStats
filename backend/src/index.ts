@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
 import { parseBoxScore } from './geminiService';
-import { getGames, getPlayers, saveGame, saveBattingLines, savePitchingLines, getBattingLines, getPitchingLines, savePlayer } from './store';
+import { getGames, getPlayers, getBattingLines, getPitchingLines, saveGameData, savePlayerTx, deleteGame } from './store';
 import crypto from 'crypto';
 
 
@@ -61,45 +61,50 @@ app.post('/api/ingest/confirm', async (req, res) => {
     // Basic validation
     if (!game || !game.id) return res.status(400).json({ error: 'Game data required' });
     
-    const players = await getPlayers();
+    const existingPlayers = await getPlayers();
     
-    const resolvePlayers = async (lines: any[]) => {
-      if (!lines) return [];
-      for (const line of lines) {
-        line.gameId = game.id;
-        if (!line.playerId && line.name) {
-          let p = players.find(player => player.name.toLowerCase() === line.name.toLowerCase());
-          
-          if (!p) {
-            const newP = { id: crypto.randomUUID(), name: line.name, number: line.number || 0, positions: [] };
-            await savePlayer(newP);
-            players.push(newP);
-            p = newP;
-          } else if (line.number && p.number === 0) {
-            // Update the existing player with the newly discovered number
-            p.number = line.number;
-            await savePlayer(p);
-          }
-          
-          line.playerId = p.id;
+    // Player resolution callback — runs inside the transaction
+    const resolvePlayer = async (client: any, line: any, players: any[]) => {
+      if (!line.playerId && line.name) {
+        let p = players.find((player: any) => player.name.toLowerCase() === line.name.toLowerCase());
+        
+        if (!p) {
+          const newP = { id: crypto.randomUUID(), name: line.name, number: line.number || 0 };
+          await savePlayerTx(client, newP);
+          players.push(newP);
+          p = newP;
+        } else if (line.number && p.number === 0) {
+          p.number = line.number;
+          await savePlayerTx(client, p);
         }
+        
+        line.playerId = p.id;
       }
-      return lines;
     };
 
-    await saveGame(game);
-
-    if (battingLines?.length) {
-      await saveBattingLines(await resolvePlayers(battingLines));
-    }
-    if (pitchingLines?.length) {
-      await savePitchingLines(await resolvePlayers(pitchingLines));
-    }
+    await saveGameData({
+      game,
+      battingLines: battingLines?.length ? battingLines : undefined,
+      pitchingLines: pitchingLines?.length ? pitchingLines : undefined,
+      existingPlayers,
+      resolvePlayer
+    });
     
     res.json({ success: true });
   } catch (error) {
     console.error('Error saving data:', error);
     res.status(500).json({ error: 'Failed to save game data' });
+  }
+});
+
+app.delete('/api/games/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await deleteGame(id);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting game:', error);
+    res.status(500).json({ error: 'Failed to delete game' });
   }
 });
 

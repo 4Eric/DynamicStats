@@ -40,15 +40,25 @@ const battingStats = computed(() => calculateBattingStats(filteredBattingLines.v
 const pitchingStats = computed(() => calculatePitchingStats(filteredPitchingLines.value));
 
 const selectedStat = ref('AVG');
-const statOptions = [
-  { label: 'Batting Average (AVG)', value: 'AVG' },
-  { label: 'On-Base Pct (OBP)', value: 'OBP' },
-  { label: 'Slugging Pct (SLG)', value: 'SLG' },
-  { label: 'On-Base + Slugging (OPS)', value: 'OPS' },
-  { label: 'Earned Run Average (ERA)', value: 'ERA' },
-  { label: 'WHIP', value: 'WHIP' },
-  { label: 'Strikeouts per 6 (K/6)', value: 'K6' }
-];
+const statOptions = computed(() => {
+  const options = [];
+  if (filteredBattingLines.value.length > 0) {
+    options.push(
+      { label: 'Batting Average (AVG)', value: 'AVG' },
+      { label: 'On-Base Pct (OBP)', value: 'OBP' },
+      { label: 'Slugging Pct (SLG)', value: 'SLG' },
+      { label: 'On-Base + Slugging (OPS)', value: 'OPS' }
+    );
+  }
+  if (filteredPitchingLines.value.length > 0) {
+    options.push(
+      { label: 'Earned Run Average (ERA)', value: 'ERA' },
+      { label: 'WHIP', value: 'WHIP' },
+      { label: 'Strikeouts per 6 (K/6)', value: 'K6' } 
+    );
+  }
+  return options;
+});
 
 // Real trend data
 const trendLabels = computed(() => {
@@ -160,9 +170,6 @@ const pitchingGameLogs = computed(() => {
           {{ player.name }} 
           <span v-if="player.number" class="text-gray-500 font-normal">#{{ player.number }}</span>
         </h2>
-        <div class="text-gray-400 mt-1 flex gap-2">
-          <span v-for="pos in player.positions" :key="pos" class="bg-gray-800 px-2 py-1 rounded text-sm">{{ pos }}</span>
-        </div>
       </div>
     </div>
 
@@ -181,7 +188,7 @@ const pitchingGameLogs = computed(() => {
     </Card>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <Card>
+      <Card v-if="filteredBattingLines.length > 0">
         <h3 class="text-lg font-bold mb-4 text-blue-400">Batting Stats</h3>
         <div class="grid grid-cols-4 gap-4 mb-6 font-mono-numbers">
           <div class="text-center">
@@ -203,7 +210,7 @@ const pitchingGameLogs = computed(() => {
         </div>
       </Card>
 
-      <Card>
+      <Card v-if="filteredPitchingLines.length > 0">
         <h3 class="text-lg font-bold mb-4 text-emerald-400">Pitching Stats</h3>
         <div class="grid grid-cols-4 gap-4 mb-6 font-mono-numbers">
           <div class="text-center">
@@ -215,8 +222,8 @@ const pitchingGameLogs = computed(() => {
             <div class="text-xl font-bold">{{ pitchingStats.WHIP }}</div>
           </div>
           <div class="text-center">
-            <div class="text-gray-400 text-xs">K/9</div>
-            <div class="text-xl font-bold">{{ pitchingStats.K9 }}</div>
+            <div class="text-gray-400 text-xs">K/6</div>
+            <div class="text-xl font-bold">{{ pitchingStats.K6 }}</div>
           </div>
           <div class="text-center">
             <div class="text-gray-400 text-xs">IP</div>
