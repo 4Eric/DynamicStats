@@ -3,19 +3,19 @@ import { BattingLine, PitchingLine } from '../types';
 export function calculateBattingStats(lines: BattingLine[]) {
   const totals = lines.reduce(
     (acc, line) => {
-      acc.AB += line.AB;
-      acc.R += line.R;
-      acc.H += line.H;
-      acc.RBI += line.RBI;
-      acc.BB += line.BB;
-      acc.SO += line.SO;
-      acc.doubles += line.doubles;
-      acc.triples += line.triples;
-      acc.HR += line.HR;
-      acc.TB += line.TB;
-      acc.SB += line.SB;
-      acc.CS += line.CS;
-      acc.HBP += line.HBP;
+      acc.AB += Number(line.AB) || 0;
+      acc.R += Number(line.R) || 0;
+      acc.H += Number(line.H) || 0;
+      acc.RBI += Number(line.RBI) || 0;
+      acc.BB += Number(line.BB) || 0;
+      acc.SO += Number(line.SO) || 0;
+      acc.doubles += Number(line.doubles) || 0;
+      acc.triples += Number(line.triples) || 0;
+      acc.HR += Number(line.HR) || 0;
+      // We'll calculate TB dynamically
+      acc.SB += Number(line.SB) || 0;
+      acc.CS += Number(line.CS) || 0;
+      acc.HBP += Number(line.HBP) || 0;
       return acc;
     },
     {
@@ -23,6 +23,10 @@ export function calculateBattingStats(lines: BattingLine[]) {
       triples: 0, HR: 0, TB: 0, SB: 0, CS: 0, HBP: 0
     }
   );
+
+  // Dynamically calculate TB: Singles (H - 2B - 3B - HR) + 2B*2 + 3B*3 + HR*4
+  // Which simplifies to: H + 2B + 2*3B + 3*HR
+  totals.TB = totals.H + totals.doubles + (2 * totals.triples) + (3 * totals.HR);
 
   const PA = totals.AB + totals.BB + totals.HBP; // simplistic PA
   const AVG = totals.AB > 0 ? totals.H / totals.AB : 0;
