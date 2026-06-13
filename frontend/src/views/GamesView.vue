@@ -9,11 +9,15 @@ const expandedGameId = ref<string | null>(null);
 
 // Mock games if empty for UI testing
 const games = computed(() => {
-  if (store.games.length > 0) return store.games;
-  return [
+  let list = store.games.length > 0 ? [...store.games] : [
     { id: '1', date: '2023-04-01', gameNumber: 1, opponent: 'Tigers', ourScore: 5, opponentScore: 3, result: 'W' },
     { id: '2', date: '2023-04-05', gameNumber: 2, opponent: 'Bears', ourScore: 2, opponentScore: 6, result: 'L' }
   ];
+  return list.sort((a, b) => {
+    const dateDiff = new Date(b.date).getTime() - new Date(a.date).getTime();
+    if (dateDiff !== 0) return dateDiff;
+    return b.gameNumber - a.gameNumber;
+  });
 });
 
 function toggleGameDetails(id: string) {
