@@ -129,7 +129,7 @@ const selectedTrendPlayers = ref<string[]>([]);
 watch([trendMode, () => store.battingLines.length, () => store.pitchingLines.length], () => {
   if (trendMode.value === 'batting') {
     selectedTrendPlayers.value = rawBattingLeaderboard.value.filter(p => p.PA > 0).map(p => p.playerId);
-    if (!['AVG','OBP','OPS','CT_pct','H','HR','RBI','R','BB','SO','AB'].includes(trendStat.value)) {
+    if (!['AVG','OBP','SLG','OPS','CT_pct','H','HR','RBI','R','BB','SO','AB'].includes(trendStat.value)) {
       trendStat.value = 'OPS';
     }
   } else {
@@ -183,6 +183,9 @@ const trendChartData = computed(() => {
              const PA = line.AB + line.BB + line.HBP;
              return PA > 0 ? parseFloat(((line.H + line.BB + line.HBP) / PA).toFixed(3)) : null;
           }
+          if (trendStat.value === 'SLG') {
+             return line.AB > 0 ? parseFloat((line.TB / line.AB).toFixed(3)) : null;
+          }
           if (trendStat.value === 'OPS') {
              const PA = line.AB + line.BB + line.HBP;
              const OBP = PA > 0 ? (line.H + line.BB + line.HBP) / PA : 0;
@@ -216,6 +219,9 @@ const trendChartData = computed(() => {
           if (trendStat.value === 'OBP') {
              const PA = runningAB + runningBB + runningHBP;
              return PA > 0 ? parseFloat(((runningH + runningBB + runningHBP) / PA).toFixed(3)) : null;
+          }
+          if (trendStat.value === 'SLG') {
+             return runningAB > 0 ? parseFloat((runningTB / runningAB).toFixed(3)) : null;
           }
           if (trendStat.value === 'OPS') {
              const PA = runningAB + runningBB + runningHBP;
@@ -296,6 +302,7 @@ const trendChartData = computed(() => {
             <template v-if="trendMode === 'batting'">
               <option value="AVG">AVG</option>
               <option value="OBP">OBP</option>
+              <option value="SLG">SLG</option>
               <option value="OPS">OPS</option>
               <option value="CT_pct">Contact %</option>
               <option value="H">Hits (H)</option>
