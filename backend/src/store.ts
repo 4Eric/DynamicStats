@@ -29,12 +29,12 @@ export async function getPitchingLines(): Promise<PitchingLine[]> {
 
 async function savePlayerTx(client: PoolClient, player: Player) {
   await client.query(
-    `INSERT INTO players (id, name, number, positions)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO players (id, name, number)
+     VALUES ($1, $2, $3)
      ON CONFLICT (id) DO UPDATE SET
      name = EXCLUDED.name,
      number = EXCLUDED.number`,
-    [player.id, player.name, player.number, []]
+    [player.id, player.name, player.number]
   );
 }
 
