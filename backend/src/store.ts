@@ -3,7 +3,7 @@ import { PoolClient } from 'pg';
 import { Game, Player, BattingLine, PitchingLine } from './types';
 
 export async function getGames(): Promise<Game[]> {
-  const result = await pool.query('SELECT * FROM games ORDER BY "gameNumber" DESC');
+  const result = await pool.query('SELECT * FROM games ORDER BY date DESC, "gameNumber" DESC');
   return result.rows;
 }
 
