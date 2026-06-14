@@ -85,6 +85,7 @@ export async function parseBoxScore(base64Image: string, mimeType: string, type:
   const prompt = `
     Analyze the provided baseball box score screenshot.
     Extract the ${type} statistics for all players listed.
+    CRITICAL: You MUST extract ALL visible stats, including doubles (2B), triples (3B), HR, and TB. If they are in the columns, do not skip them! If they are not visible, just output 0.
     Also extract the overall game metadata (opponent, date, scores) from the header if visible.
     Ensure that IP (Innings Pitched) is extracted as a decimal (e.g. 1.2 means 1 and 2/3 innings).
     CRITICAL: Ensure that the player's name is just the name (first initial and last name). Strip out any uniform numbers or position abbreviations (e.g. P, C, 1B, 2B, 3B, SS, LF, CF, RF, EH) from the name field entirely. The name should just be letters, like "E Swantee".
