@@ -40,7 +40,7 @@ const battingSchema: Schema = {
           HBP: { type: Type.INTEGER },
           E: { type: Type.INTEGER, description: "Errors" }
         },
-        required: ["name", "AB", "R", "H", "RBI", "BB", "SO"]
+        required: ["name", "AB", "R", "H", "RBI", "BB", "SO", "doubles", "triples", "HR", "TB", "SB", "CS", "HBP"]
       }
     }
   }
